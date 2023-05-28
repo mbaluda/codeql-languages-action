@@ -1,11 +1,9 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
-inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+name: 'CodeQL Languages'
+description: 'Gets the list of CodeQL-supported languages in a repo.'
+author: '@mbaluda'
+outputs:
+  languages:
+    description: 'CodeQL-supported languages in the repo'
 runs:
   using: 'node16'
   main: 'dist/index.js'
