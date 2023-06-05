@@ -56,6 +56,8 @@ async function run(): Promise<void> {
       languages.push('javascript');
     }
 
+    core.info(`Languages: ${languages}`);
+
     core.setOutput('languages', languages);
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message);

@@ -79,6 +79,7 @@ function run() {
             if (!exclude_codeql_languages.includes('javascript') && tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(js|jsx|mjs|es|es6|htm|html|xhtm|xhtms|vue|hbs|ejs|njk|ts|tsx|mts|cts)$/); })) {
                 languages.push('javascript');
             }
+            core.info(`Languages: ${languages}`);
             core.setOutput('languages', languages);
         }
         catch (error) {
