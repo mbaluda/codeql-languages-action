@@ -1,6 +1,11 @@
 name: 'CodeQL Languages'
 description: 'Gets the list of CodeQL-supported languages in a repo.'
 author: '@mbaluda'
+inputs:
+  exclude_codeql_languages:
+    description: 'Excluded Languages'
+    required: false
+    default: '[]'
 outputs:
   languages:
     description: 'CodeQL-supported languages in the repo'

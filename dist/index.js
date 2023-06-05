@@ -49,35 +49,35 @@ function run() {
             const exclude_codeql_languages = core.getInput('exclude_codeql_languages');
             core.info(`Repo: ${owner}/${repo}`);
             core.info(`SHA: ${process.env.GITHUB_SHA}`);
+            core.info(`Exclusion: ${exclude_codeql_languages}`);
+            // Limited to 100'000 files
             const { data: tree } = yield new rest_1.Octokit().rest.git.getTree({
                 owner, repo,
                 tree_sha: process.env.GITHUB_SHA ? process.env.GITHUB_SHA : "HEAD",
                 recursive: "true",
             });
             let languages = [];
-            const hasCppFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(cpp|c\+\+|cxx|c|cc)$/); });
-            if (hasCppFile)
+            if (!exclude_codeql_languages.includes('cpp') && tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(cpp|c\+\+|cxx|c|cc)$/); })) {
                 languages.push('cpp');
-            const hasCsharpFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(cs|cshtml|xaml)$/); });
-            if (hasCsharpFile)
+            }
+            if (!exclude_codeql_languages.includes('csharp') && tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(cs|cshtml|xaml)$/); })) {
                 languages.push('csharp');
-            const hasGoFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.go$/); });
-            if (hasGoFile)
+            }
+            if (!exclude_codeql_languages.includes('go') && tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.go$/); })) {
                 languages.push('go');
-            const hasJavaFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(java|kt)$/); });
-            if (hasJavaFile)
+            }
+            if (!exclude_codeql_languages.includes('java') && tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(java|kt)$/); })) {
                 languages.push('java');
-            const hasPythonFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.py$/); });
-            if (hasPythonFile)
+            }
+            if (!exclude_codeql_languages.includes('python') && tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.py$/); })) {
                 languages.push('python');
-            const hasRubyFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(rb|erb)$/); });
-            if (hasRubyFile)
+            }
+            if (!exclude_codeql_languages.includes('ruby') && tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(rb|erb)$/); })) {
                 languages.push('ruby');
-            const hasJavascriptFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(js|jsx|mjs|es|es6|htm|html|xhtm|xhtms|vue|hbs|ejs|njk|ts|tsx|mts|cts)$/); });
-            if (hasJavascriptFile)
+            }
+            if (!exclude_codeql_languages.includes('javascript') && tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(js|jsx|mjs|es|es6|htm|html|xhtm|xhtms|vue|hbs|ejs|njk|ts|tsx|mts|cts)$/); })) {
                 languages.push('javascript');
-            // remove excluded languages
-            languages = languages.filter(x => !exclude_codeql_languages.includes(x));
+            }
             core.setOutput('languages', languages);
         }
         catch (error) {
