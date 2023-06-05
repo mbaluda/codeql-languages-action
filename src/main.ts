@@ -1,10 +1,10 @@
 import * as core from '@actions/core'
+import { context } from '@actions/github'
 import { Octokit } from "@octokit/rest"
 
 async function run(): Promise<void> {
   try {
-    const owner = core.getInput('owner');
-    const repo = core.getInput('repo');
+    const { owner, repo } = context.repo;
     const exclude_codeql_languages: string = core.getInput('exclude_codeql_languages');
 
     core.info(`Repo: ${owner}/${repo}`);
@@ -58,10 +58,7 @@ async function run(): Promise<void> {
 
     core.setOutput('languages', languages);
   } catch (error) {
-    if (error instanceof Error) {
-      core.info(error.stack ? error.stack : error.name);
-      core.setFailed(error.message);
-    }
+    if (error instanceof Error) core.setFailed(error.message);
   }
 }
 
