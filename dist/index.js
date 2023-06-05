@@ -82,8 +82,10 @@ function run() {
             core.setOutput('languages', languages);
         }
         catch (error) {
-            if (error instanceof Error)
+            if (error instanceof Error) {
+                core.info(error.stack ? error.stack : error.name);
                 core.setFailed(error.message);
+            }
         }
     });
 }

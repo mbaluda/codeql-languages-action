@@ -21,44 +21,47 @@ async function run(): Promise<void> {
 
     let languages = [];
 
-    if (!exclude_codeql_languages.includes('cpp') && tree.tree.some((item) =>
+    if (!exclude_codeql_languages.includes('cpp') && tree.tree.some((item: any) =>
       item.path?.match(/\.(cpp|c\+\+|cxx|c|cc)$/))) {
       languages.push('cpp');
     }
 
-    if (!exclude_codeql_languages.includes('csharp') && tree.tree.some((item) =>
+    if (!exclude_codeql_languages.includes('csharp') && tree.tree.some((item: any) =>
       item.path?.match(/\.(cs|cshtml|xaml)$/))) {
       languages.push('csharp');
     }
 
-    if (!exclude_codeql_languages.includes('go') && tree.tree.some((item) =>
+    if (!exclude_codeql_languages.includes('go') && tree.tree.some((item: any) =>
       item.path?.match(/\.go$/))) {
       languages.push('go');
     }
 
-    if (!exclude_codeql_languages.includes('java') && tree.tree.some((item) =>
+    if (!exclude_codeql_languages.includes('java') && tree.tree.some((item: any) =>
       item.path?.match(/\.(java|kt)$/))) {
       languages.push('java');
     }
 
-    if (!exclude_codeql_languages.includes('python') && tree.tree.some((item) =>
+    if (!exclude_codeql_languages.includes('python') && tree.tree.some((item: any) =>
       item.path?.match(/\.py$/))) {
       languages.push('python');
     }
 
-    if (!exclude_codeql_languages.includes('ruby') && tree.tree.some((item) =>
+    if (!exclude_codeql_languages.includes('ruby') && tree.tree.some((item: any) =>
       item.path?.match(/\.(rb|erb)$/))) {
       languages.push('ruby');
     }
 
-    if (!exclude_codeql_languages.includes('javascript') && tree.tree.some((item) =>
+    if (!exclude_codeql_languages.includes('javascript') && tree.tree.some((item: any) =>
       item.path?.match(/\.(js|jsx|mjs|es|es6|htm|html|xhtm|xhtms|vue|hbs|ejs|njk|ts|tsx|mts|cts)$/))) {
       languages.push('javascript');
     }
 
     core.setOutput('languages', languages);
   } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
+    if (error instanceof Error) {
+      core.info(error.stack ? error.stack : error.name);
+      core.setFailed(error.message);
+    }
   }
 }
 
