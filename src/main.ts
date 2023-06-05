@@ -12,7 +12,8 @@ async function run(): Promise<void> {
     core.info(`Exclusion: ${exclude_codeql_languages}`);
 
     // Limited to 100'000 files
-    const { data: tree } = await new Octokit().rest.git.getTree({
+    const octokit = new Octokit();
+    const { data: tree } = await octokit.rest.git.getTree({
       owner, repo,
       tree_sha: process.env.GITHUB_SHA ? process.env.GITHUB_SHA : "HEAD",
       recursive: "true",

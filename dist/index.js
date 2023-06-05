@@ -51,7 +51,8 @@ function run() {
             core.info(`SHA: ${process.env.GITHUB_SHA}`);
             core.info(`Exclusion: ${exclude_codeql_languages}`);
             // Limited to 100'000 files
-            const { data: tree } = yield new rest_1.Octokit().rest.git.getTree({
+            const octokit = new rest_1.Octokit();
+            const { data: tree } = yield octokit.rest.git.getTree({
                 owner, repo,
                 tree_sha: process.env.GITHUB_SHA ? process.env.GITHUB_SHA : "HEAD",
                 recursive: "true",
