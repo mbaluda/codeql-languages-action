@@ -46,20 +46,38 @@ function run() {
         try {
             const owner = core.getInput('owner');
             const repo = core.getInput('repo');
-            const octokit = new rest_1.Octokit();
-            const { data: tree } = yield octokit.rest.git.getTree({
-                owner,
-                repo,
+            const exclude_codeql_languages = core.getInput('exclude_codeql_languages');
+            core.info(`Repo: ${owner}/${repo}`);
+            core.info(`SHA: ${process.env.GITHUB_SHA}`);
+            const { data: tree } = yield new rest_1.Octokit().rest.git.getTree({
+                owner, repo,
                 tree_sha: process.env.GITHUB_SHA ? process.env.GITHUB_SHA : "HEAD",
                 recursive: "true",
             });
             let languages = [];
-            const hasJSFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.js$/); });
-            if (hasJSFile)
-                languages.push('javascript');
-            const hasCPPFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.cpp$/); });
-            if (hasCPPFile)
+            const hasCppFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(cpp|c\+\+|cxx|c|cc)$/); });
+            if (hasCppFile)
                 languages.push('cpp');
+            const hasCsharpFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(cs|cshtml|xaml)$/); });
+            if (hasCsharpFile)
+                languages.push('csharp');
+            const hasGoFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.go$/); });
+            if (hasGoFile)
+                languages.push('go');
+            const hasJavaFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(java|kt)$/); });
+            if (hasJavaFile)
+                languages.push('java');
+            const hasPythonFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.py$/); });
+            if (hasPythonFile)
+                languages.push('python');
+            const hasRubyFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(rb|erb)$/); });
+            if (hasRubyFile)
+                languages.push('ruby');
+            const hasJavascriptFile = tree.tree.some((item) => { var _a; return (_a = item.path) === null || _a === void 0 ? void 0 : _a.match(/\.(js|jsx|mjs|es|es6|htm|html|xhtm|xhtms|vue|hbs|ejs|njk|ts|tsx|mts|cts)$/); });
+            if (hasJavascriptFile)
+                languages.push('javascript');
+            // remove excluded languages
+            languages = languages.filter(x => !exclude_codeql_languages.includes(x));
             core.setOutput('languages', languages);
         }
         catch (error) {
