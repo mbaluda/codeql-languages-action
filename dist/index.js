@@ -46,7 +46,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { owner, repo } = github_1.context.repo;
-            const exclude_codeql_languages = core.getInput('exclude_codeql_languages');
+            const exclude_codeql_languages = JSON.parse(core.getInput('exclude_codeql_languages'));
             core.info(`Repo: ${owner}/${repo}`);
             core.info(`SHA: ${process.env.GITHUB_SHA}`);
             core.info(`Exclusion: ${exclude_codeql_languages}`);
